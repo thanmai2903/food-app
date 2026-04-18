@@ -1,16 +1,51 @@
-# React + Vite
+Live Streaming At : https://food-app-beta-inky.vercel.app/
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 🍛 South Indian Flavors – Food Ordering Website
 
-Currently, two official plugins are available:
+A modern and responsive **food ordering web application** built using **React.js** and **Tailwind CSS**.  
+This project delivers a smooth and interactive user experience inspired by real-world food delivery platforms like Swiggy and Zomato.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The website allows users to explore a variety of South Indian dishes, search food items using text or voice search, filter by categories, manage cart items, and navigate through multiple pages with seamless routing.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🚀 Features
 
-## Expanding the ESLint configuration
+- 🔍 Smart search with live filtering
+- 🎤 Voice search using Web Speech API
+- 🍽️ Dynamic menu with category filters
+- 🛒 Cart sidebar with add/remove functionality
+- 🔐 Login, Signup, and Logout pages
+- 📱 Fully responsive design (mobile, tablet, laptop)
+- ✨ Smooth animations and hover effects
+- 🎟️ Offers and coupon popup section
+- 📍 Order tracking page
+- 🍴 Table booking page
+- 💬 WhatsApp quick contact button
+- 🧑‍💼 Admin messages page
+- ⭐ Customer reviews carousel
+- 🎨 Professional UI with Tailwind CSS
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🛠️ Tech Stack Used
+
+### Frontend
+- **React.js**
+- **React Router DOM**
+- **Tailwind CSS**
+- **Framer Motion**
+
+### State Management
+- **React Hooks**
+  - `useState`
+  - `useEffect`
+  - `useMemo`
+  - `useRef`
+
+### Additional APIs / Features
+- **Web Speech API** for voice search
+- **Dynamic filtering and search suggestions**
+- **Reusable components architecture**
+
+---
