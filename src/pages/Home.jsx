@@ -2,6 +2,7 @@ import React, { useEffect,useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
 
 const reviews = [
   {
@@ -286,10 +287,8 @@ const ReviewCarousel = () => {
   );
 };
 
-const Home = () => {
+const Home = ({ setCartOpen }) => {
   const [showCoupon, setShowCoupon] = useState(true);
-  const [cartOpen, setCartOpen] = useState(false);
-
 
   const featuredFoods = [
     {
@@ -334,6 +333,8 @@ const Home = () => {
         "bg-gradient-to-r from-pink-100 to-pink-200 text-pink-800",
     },
   ];
+  const navigate = useNavigate();
+const { addToCart } = useCart();
 
   return (
     <div className="bg-gradient-to-b from-gray-50 to-white min-h-screen">
@@ -630,16 +631,20 @@ const Home = () => {
           <button
   onClick={() => {
     addToCart({
-      id: index + 100, // unique id
+      id: index + 1000,
       name: dish.name,
       price: parseInt(dish.price.replace("₹", "")),
       image: dish.image,
+      category: "special",
     });
-    setCartOpen(true); // 🔥 open cart sidebar
+
+    if (setCartOpen) setCartOpen(true); // ✅ open cart
+
+    navigate("/checkout"); // ✅ go to payment
   }}
-  className="mt-4 w-full bg-pink-100 hover:bg-pink-200 text-pink-600 py-2 rounded-xl font-semibold transition"
+  className="mt-4 w-full cursor-pointer bg-pink-100 hover:bg-pink-200 text-pink-600 py-2 rounded-xl font-semibold transition"
 >
-  Order Now 🛒
+  Order Now
 </button>
         </div>
 
