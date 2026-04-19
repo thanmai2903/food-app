@@ -1,6 +1,7 @@
 import React, { useEffect,useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCart } from "../context/CartContext";
 
 const reviews = [
   {
@@ -181,9 +182,9 @@ const reviews = [
   ].map((item, index) => (
     <div
       key={index}
-      className="bg-white rounded-3xl shadow-lg p-8 text-center hover:shadow-2xl hover:-translate-y-2 transition duration-300"
+      className="bg-white cursor-pointer rounded-3xl shadow-lg p-8 text-center hover:shadow-2xl hover:-translate-y-2 transition duration-300"
     >
-      <h3 className="text-4xl font-extrabold text-pink-500 mb-2">
+      <h3 className="text-4xl cursor-pointer font-extrabold text-pink-500 mb-2">
         {item.count}
       </h3>
       <p className="text-gray-600 font-medium">
@@ -221,7 +222,7 @@ const ReviewCarousel = () => {
 
   return (
     <div
-      className="max-w-4xl mx-auto mt-12 relative"
+      className="max-w-4xl cursor-pointer mx-auto mt-12 relative"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -260,22 +261,22 @@ const ReviewCarousel = () => {
       {reviews[current].name}
     </h3>
 
-    <p className="text-sm text-gray-500">
+    <p className="text-sm cursor-pointer text-gray-500">
       {reviews[current].role}
     </p>
 
-    <div className="text-yellow-400 text-lg mt-1">
+    <div className="text-yellow-400 cursor-pointer text-lg mt-1">
       ⭐⭐⭐⭐⭐
     </div>
   </div>
 </div>
 
-          <div className="relative mt-6 bg-pink-50 rounded-2xl p-6">
-  <span className="absolute top-2 left-4 text-7xl font-bold text-pink-200 select-none">
+          <div className="relative cursor-pointer mt-6 bg-pink-50 rounded-2xl p-6">
+  <span className="absolute top-2 cursor-pointer left-4 text-7xl font-bold text-pink-200 select-none">
     “
   </span>
 
-  <p className="relative text-gray-600 text-xl leading-9 italic pl-8 pt-4 z-10">
+  <p className="relative text-gray-600 cursor-pointer text-xl leading-9 italic pl-8 pt-4 z-10">
     {reviews[current].review}
   </p>
 </div>
@@ -288,12 +289,7 @@ const ReviewCarousel = () => {
 const Home = () => {
   const [showCoupon, setShowCoupon] = useState(true);
   const [cartOpen, setCartOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
 
-  const addToCart = (food) => {
-    setCartItems([...cartItems, food]);
-    setCartOpen(true);
-  };
 
   const featuredFoods = [
     {
@@ -365,7 +361,7 @@ const Home = () => {
       )}
     </div>
       {/* Hero */}
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden cursor-pointer">
         <img
           src="https://images.unsplash.com/photo-1589302168068-964664d93dc0"
           alt="food"
@@ -395,7 +391,7 @@ const Home = () => {
           Popular Categories
         </h2>
 
-        <div className="flex flex-wrap justify-center gap-6">
+        <div className="flex cursor-pointer flex-wrap justify-center gap-6">
           {categories.map((item) => (
             <Link
               key={item.name}
@@ -414,7 +410,7 @@ const Home = () => {
           Why Choose Us
         </h2>
 
-        <div className="grid md:grid-cols-3 gap-10">
+        <div className="grid cursor-pointer md:grid-cols-3 gap-10">
           {[
             {
               icon: "🍛",
@@ -445,7 +441,7 @@ const Home = () => {
       </div>
 
       {/* Featured Dishes */}
-      <div className="py-20 px-10 bg-gradient-to-b from-white to-pink-50">
+      <div className="py-20 cursor-pointer px-10 bg-gradient-to-b from-white to-pink-50">
         <h2 className="text-4xl font-extrabold text-center mb-14 text-gray-800">
           Featured Dishes
         </h2>
@@ -459,10 +455,10 @@ const Home = () => {
               <img
                 src={food.image}
                 alt={food.name}
-                className="w-full h-64 object-cover group-hover:scale-110 transition duration-500"
+                className="w-full cursor-pointer h-64 object-cover group-hover:scale-110 transition duration-500"
               />
 
-              <div className="p-6">
+              <div className="p-6 cursor-pointer">
                 <h3 className="text-2xl font-bold">{food.name}</h3>
                 <p className="text-pink-500 font-bold text-2xl mt-3">
                   {food.price}
@@ -486,9 +482,9 @@ const Home = () => {
   ].map((item, index) => (
     <div
       key={index}
-      className="bg-white rounded-3xl shadow-lg p-8 text-center hover:shadow-2xl hover:-translate-y-2 transition duration-300"
+      className="bg-white rounded cursor-pointer-3xl shadow-lg p-8 text-center hover:shadow-2xl hover:-translate-y-2 transition duration-300"
     >
-      <h3 className="text-4xl font-extrabold text-pink-500 mb-2">
+      <h3 className="text-4xl cursor-pointer font-extrabold text-pink-500 mb-2">
         {item.count}
       </h3>
       <p className="text-gray-600 font-medium">
@@ -499,7 +495,7 @@ const Home = () => {
 </motion.div>
 
       {/* Reviews */}
-      <div className="py-24 px-10 bg-gradient-to-br from-pink-50 via-white to-slate-100">
+      <div className="py-24 cursor-pointer px-10 bg-gradient-to-br from-pink-50 via-white to-slate-100">
         <motion.h2
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -526,7 +522,7 @@ const Home = () => {
   viewport={{ once: true }}
   className="py-16 px-6 md:px-10 bg-white"
 >
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+  <div className="grid cursor-pointer grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
     {[
       { count: "2000+", label: "Happy Customers" },
       { count: "100+", label: "South Indian Dishes" },
@@ -534,7 +530,7 @@ const Home = () => {
     ].map((item, index) => (
       <div
         key={index}
-        className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-3xl shadow-lg p-8 text-center hover:shadow-2xl hover:-translate-y-2 transition duration-300"
+        className="cursor-pointer bg-gradient-to-br from-pink-50 to-rose-50 rounded-3xl shadow-lg p-8 text-center hover:shadow-2xl hover:-translate-y-2 transition duration-300"
       >
         <h3 className="text-4xl font-extrabold text-pink-500 mb-3">
           {item.count}
@@ -559,7 +555,7 @@ const Home = () => {
     premium ingredients and traditional flavors.
   </p>
 
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+  <div className="grid grid-cols-1 cursor-pointer sm:grid-cols-2 lg:grid-cols-4 gap-8">
     {[
       {
         name: "Paneer Dosa",
@@ -612,9 +608,9 @@ const Home = () => {
     ].map((dish, index) => (
       <div
         key={index}
-        className="group bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition duration-300"
+        className="group cursor-pointer bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition duration-300"
       >
-        <div className="overflow-hidden">
+        <div className="overflow-hidden cursor-pointer">
           <img
             src={dish.image}
             alt={dish.name}
@@ -631,9 +627,20 @@ const Home = () => {
             {dish.price}
           </p>
 
-          <button className="mt-4 w-full bg-pink-100 hover:bg-pink-200 text-pink-600 py-2 rounded-xl font-semibold transition">
-            Order Now
-          </button>
+          <button
+  onClick={() => {
+    addToCart({
+      id: index + 100, // unique id
+      name: dish.name,
+      price: parseInt(dish.price.replace("₹", "")),
+      image: dish.image,
+    });
+    setCartOpen(true); // 🔥 open cart sidebar
+  }}
+  className="mt-4 w-full bg-pink-100 hover:bg-pink-200 text-pink-600 py-2 rounded-xl font-semibold transition"
+>
+  Order Now 🛒
+</button>
         </div>
 
       </div>

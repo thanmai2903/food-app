@@ -1,14 +1,20 @@
 import React from "react";
 import { useCart } from "../context/CartContext.jsx";
+import { useNavigate } from "react-router-dom"; // ✅ IMPORTANT
 
 const CartSidebar = ({ open, setOpen }) => {
+  const navigate = useNavigate(); // ✅ ADD THIS
+  const cartContext = useCart();
+
+  if (!cartContext) return null;
+
   const {
-    cart,
+    cart = [],
     addToCart,
     decreaseQty,
     removeFromCart,
     total,
-  } = useCart();
+  } = cartContext;
 
   return (
     <div
@@ -31,12 +37,14 @@ const CartSidebar = ({ open, setOpen }) => {
       <div className="p-3 space-y-3 overflow-y-auto h-[75%]">
         {cart.length === 0 ? (
           <div className="text-center mt-12">
-  <div className="text-5xl">🍽️</div>
-  <h3 className="text-lg font-semibold mt-2">Your cart is empty</h3>
-  <p className="text-gray-500 text-sm">
-    Add delicious South Indian food to start your order
-  </p>
-</div>
+            <div className="text-5xl">🍽️</div>
+            <h3 className="text-lg font-semibold mt-2">
+              Your cart is empty
+            </h3>
+            <p className="text-gray-500 text-sm">
+              Add delicious food to start your order
+            </p>
+          </div>
         ) : (
           cart.map((item) => (
             <div
@@ -48,7 +56,7 @@ const CartSidebar = ({ open, setOpen }) => {
                 ₹{item.price}
               </p>
 
-              {/* QTY CONTROLS */}
+              {/* QTY */}
               <div className="flex items-center gap-2 mt-2">
                 <button
                   onClick={() => decreaseQty(item.id)}
@@ -80,33 +88,55 @@ const CartSidebar = ({ open, setOpen }) => {
       </div>
 
       {/* FOOTER */}
-<div className="absolute bottom-0 w-full p-4 border-t bg-white shadow-inner">
+      <div className="absolute bottom-0 w-full p-4 border-t bg-white shadow-inner">
+        
+        {/* TOTAL */}
+        <div className="flex justify-between font-bold text-lg mb-3">
+          <span>Total:</span>
+          <span className="text-green-600">₹{total}</span>
+        </div>
 
-  {/* TOTAL */}
-  <div className="flex justify-between font-bold text-lg mb-3">
-    <span>Total:</span>
-    <span className="text-green-600">₹{total}</span>
-  </div>
+        {/* WHATSAPP ORDER */}
+        <button
+          className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg transition font-semibold"
+          onClick={() => {
+            const orderText = cart
+              .map(
+                (item) =>
+                  `${item.name} x ${item.qty} = ₹${
+                    item.price * item.qty
+                  }`
+              )
+              .join("%0A");
 
-  {/* PLACE ORDER BUTTON (WHATSAPP) */}
-  <button
-    className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg transition font-semibold"
-    onClick={() => {
-      const orderText = cart
-        .map((item) => `${item.name} x ${item.qty} = ₹${item.price * item.qty}`)
-        .join("%0A");
+            const message = `🍛 *New Order*%0A%0A${orderText}%0A%0A*Total: ₹${total}*`;
 
-      const message = `🍛 *New South Indian Order*%0A%0A${orderText}%0A%0A*Total: ₹${total}*`;
+            window.open(
+              `https://wa.me/919441918650?text=${message}`,
+              "_blank"
+            );
+          }}
+        >
+          🚀 Place Order on WhatsApp
+        </button>
 
-      window.open(
-        `https://wa.me/919441918650?text=${message}`,
-        "_blank"
-      );
-    }}
-  >
-    🚀 Place Order on WhatsApp
-  </button>
-</div>
+        {/* PAYMENT */}
+        <button
+  disabled={cart.length === 0}
+  onClick={() => {
+    setOpen(false);
+    navigate("/checkout");
+  }}
+  className={`w-full py-3 cursor-pointer rounded-lg mt-2 ${
+    cart.length === 0
+      ? "bg-gray-400 cursor-not-allowed"
+      : "bg-black hover:bg-gray-800 text-white"
+  }`}
+>
+  Proceed to Payment 💳
+</button>
+
+      </div>
     </div>
   );
 };

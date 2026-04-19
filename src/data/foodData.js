@@ -127,9 +127,25 @@ export const foods = [
   { name: "Onion Pakoda", category: "snacks" },
   { name: "Sabudana Vada", category: "snacks" },
   { name: "Kara Boondi", category: "snacks" }
-].map((item, index) => ({
-  id: index + 1,
-  ...item,
-  price: Math.floor(Math.random() * 200) + 50,
-  image: getImage(item.name)
-}));
+].map((item, index) => {
+  // 🔥 AUTO VEG/NON-VEG
+  const nonVegItems = ["Chicken", "Mutton", "Fish", "Prawn", "Egg"];
+
+  const isNonVeg = nonVegItems.some((word) =>
+    item.name.toLowerCase().includes(word.toLowerCase())
+  );
+
+  // 🔥 RANDOM BESTSELLER (20%)
+  const isBestSeller = Math.random() < 0.2;
+
+  return {
+    id: index + 1,
+    ...item,
+    price: Math.floor(Math.random() * 200) + 50,
+    image: getImage(item.name),
+
+    // ✅ ADD THESE
+    type: isNonVeg ? "non-veg" : "veg",
+    bestSeller: isBestSeller,
+  };
+});

@@ -1,26 +1,38 @@
-import React, { createContext, useState, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 
 const CartContext = createContext();
+
+export const useCart = () => {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error("useCart must be used inside CartProvider");
+  }
+  return context;
+};
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
-  const addToCart = (food) => {
-    setCart((prev) => {
-      const existing = prev.find((item) => item.id === food.id);
+  // 🧾 LOAD ORDERS FROM LOCALSTORAGE
+  const [orders, setOrders] = useState(
+    JSON.parse(localStorage.getItem("orders")) || []
+  );
 
-      if (existing) {
-        return prev.map((item) =>
-          item.id === food.id
-            ? { ...item, qty: item.qty + 1 }
-            : item
+  // ➕ ADD ITEM
+  const addToCart = (item) => {
+    setCart((prev) => {
+      const exists = prev.find((i) => i.id === item.id);
+
+      if (exists) {
+        return prev.map((i) =>
+          i.id === item.id ? { ...i, qty: i.qty + 1 } : i
         );
       }
-
-      return [...prev, { ...food, qty: 1 }];
+      return [...prev, { ...item, qty: 1 }];
     });
   };
 
+  // ➖ DECREASE QTY
   const decreaseQty = (id) => {
     setCart((prev) =>
       prev
@@ -31,14 +43,38 @@ export const CartProvider = ({ children }) => {
     );
   };
 
+  // ❌ REMOVE
   const removeFromCart = (id) => {
     setCart((prev) => prev.filter((item) => item.id !== id));
   };
 
+  // 💰 TOTAL
   const total = cart.reduce(
     (sum, item) => sum + item.price * item.qty,
     0
   );
+
+  // 🧹 CLEAR CART
+  const clearCart = () => {
+    setCart([]);
+  };
+
+  // ✅ PLACE ORDER (🔥 IMPORTANT)
+  const placeOrder = () => {
+    const newOrder = {
+      id: Date.now(),
+      items: cart,
+      total,
+      time: new Date().toLocaleString(),
+    };
+
+    const updatedOrders = [newOrder, ...orders];
+
+    setOrders(updatedOrders);
+    localStorage.setItem("orders", JSON.stringify(updatedOrders));
+
+    setCart([]); // clear cart after order
+  };
 
   return (
     <CartContext.Provider
@@ -48,11 +84,12 @@ export const CartProvider = ({ children }) => {
         decreaseQty,
         removeFromCart,
         total,
+        clearCart,
+        placeOrder, // 🔥 ADD THIS
+        orders,     // 🔥 ADD THIS
       }}
     >
       {children}
     </CartContext.Provider>
   );
 };
-
-export const useCart = () => useContext(CartContext);

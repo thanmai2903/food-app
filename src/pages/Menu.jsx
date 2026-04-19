@@ -5,11 +5,11 @@ import FoodCard from "../components/FoodCard";
 import CategoryFilter from "../components/CategoryFilter";
 import { foods } from "../data/foodData";
 
-const Menu = () => {
+const Menu = ({ setCartOpen }) => {
   const location = useLocation();
 
   const params = new URLSearchParams(location.search);
-const urlCategory = (params.get("category") || "all").toLowerCase();
+  const urlCategory = (params.get("category") || "all").toLowerCase();
 
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState(urlCategory);
@@ -18,10 +18,8 @@ const urlCategory = (params.get("category") || "all").toLowerCase();
     setCategory(urlCategory);
   }, [urlCategory]);
 
-  // 🔥 SMART NORMALIZER
   const normalize = (str) => str?.toLowerCase().trim() || "";
 
-  // 🚀 SMART SEARCH + FILTER (SWIGGY STYLE)
   const filteredFoods = useMemo(() => {
     const searchText = normalize(search);
     const selectedCategory = normalize(category);
@@ -31,29 +29,17 @@ const urlCategory = (params.get("category") || "all").toLowerCase();
         const name = normalize(food.name);
         const foodCategory = normalize(food.category);
 
-        const matchesSearch =
-          searchText === "" || name.includes(searchText);
-
-        const matchesCategory =
-          selectedCategory === "all" || foodCategory === selectedCategory;
-
-        return matchesSearch && matchesCategory;
+        return (
+          (searchText === "" || name.includes(searchText)) &&
+          (selectedCategory === "all" ||
+            foodCategory === selectedCategory)
+        );
       })
-      // 🔥 PRIORITY SORTING (important upgrade)
       .sort((a, b) => {
-        const aName = normalize(a.name);
-        const bName = normalize(b.name);
-
-        const aStarts = aName.startsWith(searchText) ? 1 : 0;
-        const bStarts = bName.startsWith(searchText) ? 1 : 0;
-
+        const aStarts = normalize(a.name).startsWith(searchText) ? 1 : 0;
+        const bStarts = normalize(b.name).startsWith(searchText) ? 1 : 0;
         return bStarts - aStarts;
       });
-      return (
-      (!searchText || normalize(food.name).includes(searchText)) &&
-      (selectedCategory === "all" ||
-        normalize(food.category) === selectedCategory)
-    );
   }, [search, category]);
 
   return (
@@ -65,20 +51,23 @@ const urlCategory = (params.get("category") || "all").toLowerCase();
           🍽️ Explore Delicious Food
         </h1>
 
-        {/* SEARCH */}
         <SearchBar search={search} setSearch={setSearch} />
       </div>
 
       {/* CATEGORY FILTER */}
-      <div className="sticky top-0 z-10 bg-gray-100 py-4">
+      <div className="sticky top-0 cursor-pointer z-10 bg-gray-100 py-4">
         <CategoryFilter setCategory={setCategory} />
       </div>
 
       {/* FOOD GRID */}
-<div className="max-w-6xl mx-auto mt-8 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+      <div className="max-w-6xl cursor-pointer mx-auto mt-8 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
         {filteredFoods.length > 0 ? (
           filteredFoods.map((food) => (
-            <FoodCard key={food.id} food={food} />
+            <FoodCard
+              key={food.id}
+              food={food}
+              setCartOpen={setCartOpen}
+            />
           ))
         ) : (
           <div className="col-span-full text-center text-gray-500 text-lg mt-10">
@@ -86,6 +75,7 @@ const urlCategory = (params.get("category") || "all").toLowerCase();
           </div>
         )}
       </div>
+
     </div>
   );
 };
