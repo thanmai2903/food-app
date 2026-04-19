@@ -1,5 +1,6 @@
 Live Streaming At : https://food-app-4qx6.vercel.app/
 
+
 # 🍛 South Indian Flavors – Food Ordering Website
 
 A modern, fully responsive **food ordering web application** built using **React.js** and **Tailwind CSS**, inspired by real-world platforms like **Swiggy** and **Zomato**.
@@ -115,8 +116,5 @@ This project demonstrates a **complete frontend food delivery system** with mode
 
 ---
 
-## 🚀 Live Demo (Optional)
-👉 Add your deployed link here  
 
-## 📸 Screenshots (Optional)
-👉 Add UI screenshots here  
+
