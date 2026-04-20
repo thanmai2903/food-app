@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import AuthPopup from "../components/AuthPopup";
+import PremiumPopup from "../components/PremiumPopup";
 
 const reviews = [
   {
@@ -198,6 +201,9 @@ const reviews = [
 const ReviewCarousel = () => {
   const [current, setCurrent] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
+  const [showCoupon, setShowCoupon] = useState(true);
+const { isLoggedIn } = useAuth();
 
   const nextSlide = () => {
     setCurrent((prev) => (prev + 1) % reviews.length);
@@ -289,6 +295,11 @@ const ReviewCarousel = () => {
 
 const Home = ({ setCartOpen }) => {
   const [showCoupon, setShowCoupon] = useState(true);
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
+  const navigate = useNavigate();
+  const { addToCart } = useCart();
+  const { isLoggedIn } = useAuth();
+
 
   const featuredFoods = [
     {
@@ -333,8 +344,26 @@ const Home = ({ setCartOpen }) => {
         "bg-gradient-to-r from-pink-100 to-pink-200 text-pink-800",
     },
   ];
-  const navigate = useNavigate();
-const { addToCart } = useCart();
+  const handleOrder = (dish, index) => {
+    if (!isLoggedIn) {
+      setShowAuthPopup(true);
+      return;
+    }
+
+    addToCart({
+      id: index + 1000,
+      name: dish.name,
+      price: parseInt(dish.price.replace("₹", "")),
+      image: dish.image,
+      category: "special",
+    });
+
+    if (setCartOpen) {
+      setCartOpen(true);
+    }
+
+    navigate("/checkout");
+  };
 
   return (
     <div className="bg-gradient-to-b from-gray-50 to-white min-h-screen">
@@ -629,19 +658,8 @@ const { addToCart } = useCart();
           </p>
 
           <button
-  onClick={() => {
-    addToCart({
-      id: index + 1000,
-      name: dish.name,
-      price: parseInt(dish.price.replace("₹", "")),
-      image: dish.image,
-      category: "special",
-    });
+   onClick={() => handleOrder(dish, index)}
 
-    if (setCartOpen) setCartOpen(true); // ✅ open cart
-
-    navigate("/checkout"); // ✅ go to payment
-  }}
   className="mt-4 w-full cursor-pointer bg-pink-100 hover:bg-pink-200 text-pink-600 py-2 rounded-xl font-semibold transition"
 >
   Order Now
@@ -654,6 +672,10 @@ const { addToCart } = useCart();
   
 </div>
       </div>
+      <AuthPopup
+  isOpen={showAuthPopup}
+  onClose={() => setShowAuthPopup(false)}
+/>
 
       {/* Footer */}
       <footer className="bg-pink-100/90 mt-[-100px] text-black text-center py-6">

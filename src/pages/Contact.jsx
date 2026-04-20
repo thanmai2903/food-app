@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import emailjs from "@emailjs/browser";
+import PremiumPopup from "../components/PremiumPopup";
+
 
 const Contact = () => {
   const [form, setForm] = useState({
@@ -27,8 +29,8 @@ const Contact = () => {
     e.preventDefault();
 
     if (!form.name || !form.email || !form.message) {
-      alert("Please fill all fields");
-      return;
+     setSent("validation");
+return;
     }
 
     emailjs
@@ -43,7 +45,7 @@ const Contact = () => {
         "BzLhPsr_N0VYtTFg8"
       )
       .then(() => {
-        setSent(true);
+        setSent("success");
         playSound();
         setForm({ name: "", email: "", message: "" });
 
@@ -142,7 +144,7 @@ const Contact = () => {
 
 
       {/* 🔥 FLOATING ACTION BUTTONS (FIXED PROPERLY) */}
-      <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex gap-3 bg-white shadow-2xl rounded-full px-4 py-2 border">
+      <div className="fixed bottom-6 right-6 bg-white text-green-600 px-6 py-4 rounded-2xl shadow-2xl border border-green-100">
 
         {/* CALL */}
         <a
@@ -172,22 +174,23 @@ const Contact = () => {
         </a>
       </div>
 
-      {/* POPUP */}
-      <AnimatePresence>
-        {sent && (
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            className="fixed bottom-6 right-6 bg-green-600 text-white px-5 py-3 rounded-xl shadow-xl"
-          >
-            ✅ Message Sent Successfully!
-            <p className="text-sm">
-              We will contact you soon 🍛
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* PREMIUM POPUPS */}
+<PremiumPopup
+  isOpen={sent === "success"}
+  type="success"
+  title="Message Sent Successfully"
+  message="Thank you for contacting us. We will get back to you shortly."
+  onClose={() => setSent(false)}
+/>
+
+<PremiumPopup
+  isOpen={sent === "validation"}
+  type="warning"
+  title="Incomplete Form"
+  message="Please fill all the fields before sending your message."
+  onClose={() => setSent(false)}
+/>
+
 
       {/* FOOTER */}
       <div className="text-center py-6 bg-pink-200 text-gray-700 text-sm mt-10">

@@ -18,11 +18,14 @@ import OrderSuccess from "./pages/OrderSuccess";
 import FloatingCart from "./components/FloatingCart";
 import OrderComplete from "./pages/OrderComplete";
 import Orders from "./pages/Orders";
+import { AuthProvider } from "./context/AuthContext";
 
 const App = () => {
   const [cartOpen, setCartOpen] = useState(false);
 
   return (
+    <AuthProvider>
+
     <BrowserRouter>
       <Navbar setCartOpen={setCartOpen} />
 
@@ -51,6 +54,7 @@ const App = () => {
       <WhatsAppButton />
 
     </BrowserRouter>
+</AuthProvider>
 
   );
 };

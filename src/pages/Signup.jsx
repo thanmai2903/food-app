@@ -21,12 +21,20 @@ const Signup = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    signup(form.email);
+  const result = signup(
+    form.name,
+    form.email,
+    form.password
+  );
 
+  if (result.success) {
     navigate("/");
-  };
+  } else {
+    alert(result.message);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-50 via-white to-pink-100 px-4">

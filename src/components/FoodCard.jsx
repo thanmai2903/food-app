@@ -1,57 +1,81 @@
 import React, { useState } from "react";
-import { useCart } from "../context/CartContext";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 
-const FoodCard = ({ food, setCartOpen }) => {
+const FoodCard = ({ food, setCartOpen, onRequireLogin }) => {
   const { addToCart } = useCart();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
   const [added, setAdded] = useState(false);
+
+  const isLoggedIn = !!user;
 
   const handleAdd = () => {
     if (!food) return;
 
+    // If user is not logged in → show premium popup
+    if (!isLoggedIn) {
+      if (onRequireLogin) {
+        onRequireLogin();
+      } else {
+        navigate("/login");
+      }
+      return;
+    }
+
     addToCart(food);
     setAdded(true);
 
-    toast.success(`${food.name} added 🛒`);
+    toast.success(`${food.name} added to cart 🛒`);
 
-    if (setCartOpen) setCartOpen(true);
+    if (setCartOpen) {
+      setCartOpen(true);
+    }
 
-    setTimeout(() => setAdded(false), 1000);
+    navigate("/checkout");
+
+    setTimeout(() => {
+      setAdded(false);
+    }, 1200);
   };
 
   return (
     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden group relative">
-
+      
       {/* IMAGE SECTION */}
       <div className="relative overflow-hidden">
-
         <img
           src={food?.image}
           alt={food?.name}
           className="w-full h-40 object-cover group-hover:scale-110 transition duration-500"
         />
 
-        {/* 🟢 VEG / 🔴 NON-VEG BADGE */}
+        {/* VEG / NON-VEG BADGE */}
         <div className="absolute top-2 left-2 bg-white px-2 py-1 rounded shadow text-xs font-semibold flex items-center gap-1">
           <span
             className={`w-3 h-3 rounded-full ${
-              food?.type === "veg" ? "bg-green-500" : "bg-red-500"
+              food?.type === "veg"
+                ? "bg-green-500"
+                : "bg-red-500"
             }`}
           ></span>
           {food?.type === "veg" ? "Veg" : "Non-Veg"}
         </div>
 
-        {/* 🏆 BEST SELLER TAG */}
+        {/* BEST SELLER */}
         {food?.bestSeller && (
           <div className="absolute top-2 right-2 bg-yellow-400 text-black text-xs px-2 py-1 rounded shadow font-bold">
             ⭐ Bestseller
           </div>
         )}
 
-        {/* ➕ QUICK ADD */}
+        {/* QUICK ADD BUTTON */}
         <button
           onClick={handleAdd}
-          className="absolute bottom-2 right-2 bg-green-600 hover:bg-green-700 text-white w-10 h-10 rounded-full text-xl shadow-lg flex items-center justify-center"
+          className="absolute bottom-2 right-2 bg-green-600 hover:bg-green-700 text-white w-10 h-10 rounded-full text-xl shadow-lg flex items-center justify-center transition"
         >
           +
         </button>
@@ -63,7 +87,7 @@ const FoodCard = ({ food, setCartOpen }) => {
           {food?.name}
         </h3>
 
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 capitalize">
           {food?.category}
         </p>
 

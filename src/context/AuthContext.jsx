@@ -3,16 +3,23 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-
-  // restore login after refresh
-  useEffect(() => {
+  // ✅ initialize directly from localStorage
+  const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("loggedInUser");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
 
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
+  // optional sync effect
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem(
+        "loggedInUser",
+        JSON.stringify(user)
+      );
+    } else {
+      localStorage.removeItem("loggedInUser");
     }
-  }, []);
+  }, [user]);
 
   const signup = (name, email, password) => {
     const newUser = { name, email, password };
@@ -43,12 +50,7 @@ export const AuthProvider = ({ children }) => {
     if (
       savedUser.email === email &&
       savedUser.password === password
-    ) {
-      localStorage.setItem(
-        "loggedInUser",
-        JSON.stringify(savedUser)
-      );
-
+    ){
       setUser(savedUser);
 
       return {
@@ -64,14 +66,16 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem("loggedInUser");
     setUser(null);
   };
+
+  const isLoggedIn = !!user;
 
   return (
     <AuthContext.Provider
       value={{
         user,
+        isLoggedIn,
         login,
         signup,
         logout,

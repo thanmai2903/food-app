@@ -1,5 +1,4 @@
 import { foodImages } from "./foodImages";
-
 const getImage = (name) => foodImages[name] || foodImages.default;
 
 export const foods = [

@@ -11,6 +11,7 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setForm({
@@ -22,10 +23,15 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    login(form.email);
+    const result = login(form.email, form.password);
 
+  if (result.success) {
+        setError("");
     navigate("/");
-  };
+  } else {
+    setError("Invalid email or password. Please try again.");
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-white to-rose-100 px-4">
@@ -63,6 +69,11 @@ const Login = () => {
             required
             className="w-full border border-gray-200 rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-pink-300 transition"
           />
+          {error && (
+  <p className="text-red-500 text-sm mt-2">
+    {error}
+  </p>
+)}
 
           <button
             type="submit"

@@ -4,10 +4,16 @@ import SearchBar from "../components/SearchBar";
 import FoodCard from "../components/FoodCard";
 import CategoryFilter from "../components/CategoryFilter";
 import { foods } from "../data/foodData";
-
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import PremiumPopup from "../components/PremiumPopup";
 const Menu = ({ setCartOpen }) => {
   const location = useLocation();
+const navigate = useNavigate();
+const { user } = useAuth();
+const isLoggedIn = !!user;
 
+const [showLoginPopup, setShowLoginPopup] = useState(false);
   const params = new URLSearchParams(location.search);
   const urlCategory = (params.get("category") || "all").toLowerCase();
 
@@ -61,21 +67,30 @@ const Menu = ({ setCartOpen }) => {
 
       {/* FOOD GRID */}
       <div className="max-w-6xl cursor-pointer mx-auto mt-8 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {filteredFoods.length > 0 ? (
-          filteredFoods.map((food) => (
-            <FoodCard
-              key={food.id}
-              food={food}
-              setCartOpen={setCartOpen}
-            />
-          ))
-        ) : (
-          <div className="col-span-full text-center text-gray-500 text-lg mt-10">
-            No foods found 😢
-          </div>
-        )}
-      </div>
-
+  {filteredFoods.length > 0 ? (
+    filteredFoods.map((food) => (
+      <FoodCard
+        key={food.id}
+        food={food}
+        setCartOpen={setCartOpen}
+        onRequireLogin={() => setShowLoginPopup(true)}
+      />
+    ))
+  ) : (
+    <div className="col-span-full text-center text-gray-500 text-lg mt-10">
+      No foods found 😢
+    </div>
+  )}
+</div>
+<PremiumPopup
+  isOpen={showLoginPopup}
+  type="warning"
+  title="Login Required"
+  message="Please login or create an account to order your favorite dishes."
+  actionText="Login"
+  onAction={() => navigate("/login")}
+  onClose={() => setShowLoginPopup(false)}
+/>
     </div>
   );
 };
