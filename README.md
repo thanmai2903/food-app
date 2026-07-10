@@ -8,6 +8,44 @@ This project provides a **complete food ordering experience** including menu bro
 
 ---
 
+# 📸 Screenshots
+
+## 🏠 Home
+
+![Home](public/screenshots/home.png)
+
+---
+
+## 🍽️ Menu
+
+![Menu](public/screenshots/menu.png)
+
+---
+
+## 🛒 Cart
+
+![Cart](public/screenshots/cart.png)
+
+---
+
+## 💳 Checkout
+
+![Checkout](public/screenshots/checkout.png)
+
+---
+
+## ℹ️ About
+
+![About](public/screenshots/about.png)
+
+---
+
+## 📞 Contact
+
+![Contact](public/screenshots/contact.png)
+
+---
+
 ## ✨ Features
 
 ### 🍽️ Food & Menu
