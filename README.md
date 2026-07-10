@@ -21,6 +21,13 @@ This project provides a **complete food ordering experience** including menu bro
 ![Menu](public/screenshots/menu.png)
 
 ---
+## 📱 Mobile Responsive
+
+The application is fully responsive and optimized for mobile devices, providing a smooth food ordering experience with an intuitive UI, responsive navigation, and easy access to all features.
+
+![Mobile View](public/screenshots/mobile.png)
+
+---
 
 ## 🛒 Cart
 
